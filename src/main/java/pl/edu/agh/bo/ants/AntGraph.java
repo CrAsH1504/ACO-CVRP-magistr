@@ -72,8 +72,8 @@ public class AntGraph implements Serializable
         m_dTau0 = (double)1 / ((double)m_nNodes * (0.5 * dAverage));
       //  m_dTau0 = 0.04;
 
-        System.out.println("Average: " + dAverage);
-        System.out.println("Tau0: " + m_dTau0);
+     //   System.out.println("Average: " + dAverage);
+     //   System.out.println("Tau0: " + m_dTau0);
 
         for(int r = 0; r < nodes(); r++)
         {

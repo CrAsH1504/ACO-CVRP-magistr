@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>operations.research</groupId>
-    <artifactId>ant-colony-vrp</artifactId>
+    <artifactId>ACO-CVRP-magistr</artifactId>
     <version>0.1-SNAPSHOT</version>
     <build>
         <plugins>
@@ -25,7 +25,16 @@
             <artifactId>jfreechart</artifactId>
             <version>1.0.19</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.12</version>
+        </dependency>
     </dependencies>
-
     
 </project>

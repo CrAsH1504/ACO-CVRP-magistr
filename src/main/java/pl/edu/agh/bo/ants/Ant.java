@@ -25,7 +25,7 @@ public abstract class Ant extends Observable implements Runnable
     protected int      m_iterationCounter;
 
     private static int s_nAntIDCounter = 0;
-    private static PrintStream s_outs;
+ //   private static PrintStream s_outs;
 
     protected static AntColony s_antColony;
 
@@ -46,7 +46,7 @@ public abstract class Ant extends Observable implements Runnable
         s_bestPathVect = null;
         s_bestPath = null;
         s_nLastBestPathIteration = 0;
-        s_outs = null;
+   //     s_outs = null;
     }
 
     public Ant(int nStartNode, Observer observer, int cap)
@@ -61,7 +61,7 @@ public abstract class Ant extends Observable implements Runnable
 
     public void init()
     {
-        if(s_outs == null)
+      /*  if(s_outs == null)
         {
             try
             {
@@ -71,7 +71,7 @@ public abstract class Ant extends Observable implements Runnable
             {
                 ex.printStackTrace();
             }
-        }
+        }*/
 
         final AntGraph graph = s_antColony.getGraph();
         m_nCurNode   = m_nStartNode;
@@ -139,15 +139,15 @@ public abstract class Ant extends Observable implements Runnable
                 s_bestPathVect          = m_pathVect;
                 s_nLastBestPathIteration = m_iterationCounter;
 
-                s_outs.println("Ant " + m_nAntID + ", Лучшая длина " + s_dBestPathValue + ", Итерация " + s_nLastBestPathIteration + ", длина " + s_bestPathVect.size() + ", маршрут" + s_bestPathVect);
+         //       s_outs.println("Ant " + m_nAntID + ", Лучшая длина " + s_dBestPathValue + ", Итерация " + s_nLastBestPathIteration + ", длина " + s_bestPathVect.size() + ", маршрут" + s_bestPathVect);
             }
         }
 
         // update the observer
         m_observer.update(this, null);
 
-        if(s_antColony.done())
-            s_outs.close();
+        /*if(s_antColony.done())
+            s_outs.close();*/
     }
 
     protected abstract boolean better(double dPathValue, double dBestPathValue);

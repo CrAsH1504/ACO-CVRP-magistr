@@ -10,10 +10,10 @@ import java.util.*;
  */
 public class AntCVRP extends Ant {
 
-    private static final double A = 0.5;
-    private static final double B = 3;
-    public static final double Q = 6;
-    public static final double R = 0.7;
+    public static double A;
+    public static double B;
+    public static double Q;
+    public static double R;
     private AntGraph graph;
 
     private static final Random s_randGen = new Random(System.currentTimeMillis());

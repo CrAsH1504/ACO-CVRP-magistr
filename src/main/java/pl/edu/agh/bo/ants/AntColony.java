@@ -18,7 +18,7 @@ import static pl.edu.agh.bo.cvrp.TestCVRP.folderName;
 
 
 public abstract class AntColony implements Observer {
-    protected PrintStream m_outs;
+   // protected PrintStream m_outs;
 
     protected AntGraph m_graph;
     protected Ant[] m_ants;
@@ -47,7 +47,7 @@ public abstract class AntColony implements Observer {
         m_ants = createAnts(m_graph, m_nAnts);
 
         try {
-            m_outs = new PrintStream(new FileOutputStream(folderName + "\\" + m_nID + "_" + m_graph.nodes() + "x" + m_ants.length + "x" + m_nIterations + "_colony.txt"));
+   //         m_outs = new PrintStream(new FileOutputStream(folderName + "\\" + m_nID + "_" + m_graph.nodes() + "x" + m_ants.length + "x" + m_nIterations + "_colony.txt"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -69,15 +69,15 @@ public abstract class AntColony implements Observer {
             }
         }
 
-        if (m_nIterCounter == m_nIterations) {
+      /*  if (m_nIterCounter == m_nIterations) {
             m_outs.close();
-        }
+        }*/
     }
 
     private void iteration() {
         m_nAntCounter = 0;
         m_nIterCounter++;
-        m_outs.print("Итерация " + m_nIterCounter);
+       // m_outs.print("Итерация " + m_nIterCounter);
         for (int i = 0; i < m_ants.length; i++) {
             m_ants[i].start();
         }
@@ -104,13 +104,13 @@ public abstract class AntColony implements Observer {
     }
 
     public synchronized void update(Observable ant, Object obj) {
-        m_outs.print("; " + ((Ant) ant).m_dPathValue);
+     //   m_outs.print("; " + ((Ant) ant).m_dPathValue);
         m_nAntCounter++;
 
         if (m_nAntCounter == m_ants.length) {
-            m_outs.println("; iteration: " + Ant.s_nLastBestPathIteration + "; result: " + Ant.s_dBestPathValue);
+         //   m_outs.println("; iteration: " + Ant.s_nLastBestPathIteration + "; result: " + Ant.s_dBestPathValue);
 
-            System.out.println("---------------------------");
+           /* System.out.println("---------------------------");
             System.out.println(m_nIterCounter + " - Best Path: " + Ant.s_dBestPathValue);
             System.out.println("---------------------------");
             System.out.println("Path seq: ");
@@ -118,7 +118,7 @@ public abstract class AntColony implements Observer {
                 System.out.print(Ant.s_bestPathVect.get(i));
                 System.out.print(" ");
             }
-            System.out.println("\n");
+            System.out.println("\n");*/
 
 
             notify();
