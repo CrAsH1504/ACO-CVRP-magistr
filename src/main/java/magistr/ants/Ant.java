@@ -1,15 +1,11 @@
 /**
  * Created by Mati on 2017-05-09.
  */
-package pl.edu.agh.bo.ants;
+package magistr.ants;
 
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
-
-import static pl.edu.agh.bo.cvrp.TestCVRP.folderName;
 
 public abstract class Ant extends Observable implements Runnable
 {

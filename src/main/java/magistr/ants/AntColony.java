@@ -1,15 +1,12 @@
-package pl.edu.agh.bo.ants;
+package magistr.ants;
 
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
 
 
-import static pl.edu.agh.bo.ants.Ant.s_nLastBestPathIteration;
-import static pl.edu.agh.bo.ants.Ant.s_bestPathVect;
-import static pl.edu.agh.bo.cvrp.TestCVRP.folderName;
+import static magistr.ants.Ant.s_nLastBestPathIteration;
+import static magistr.ants.Ant.s_bestPathVect;
 
 
 /**

@@ -1,18 +1,18 @@
-package pl.edu.agh.bo.cvrp;
+package magistr.cvrp;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import magistr.ants.AntGraph;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import pl.edu.agh.bo.ants.AntGraph;
-import pl.edu.agh.bo.charts.AntsLineChart;
+import magistr.charts.AntsLineChart;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -67,11 +67,14 @@ public class TestCVRP {
         cellMaxResult.setCellValue("Max value");
 
         int i = 1;
-        for (A = 0; A < 2; A += 0.1) {
-            for (B = 0; B < 3; B += 0.1) {
-                for (R = 0.4; R < 0.9; R += 0.01) {
-                    for (Q = 1; Q < 9; Q += 1) {
-
+        for (A = Double.valueOf(args[0]) ; A < Double.valueOf(args[1]) ; A += 0.1) {
+            System.out.println("A = " + A);
+            for (B = Double.valueOf(args[2]); B < Double.valueOf(args[3]); B += 0.1) {
+                System.out.println("B = " + B);
+                for (R = 0.6; R < 0.91; R += 0.03) {
+                    System.out.println("R = " + R);
+                    for (Q = 4; Q < 9; Q += 1) {
+                        System.out.println(LocalDateTime.now());
                         AntCVRP.A = A;
                         AntCVRP.B = B;
                         AntCVRP.R = R;
@@ -79,8 +82,8 @@ public class TestCVRP {
 
 
 
-                        start(new String[]{"-a", "10",
-                                        "-i", "5000",
+                        start(new String[]{"-a", "6",
+                                        "-i", "1000",
                                         "-r", "5",
                                         "-file", "E-n22-k4.vrp"
                         });
