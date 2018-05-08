@@ -1,4 +1,4 @@
-package pl.edu.agh.bo.cvrp;
+package magistr.cvrp;
 
 import java.io.File;
 import java.io.FileNotFoundException;

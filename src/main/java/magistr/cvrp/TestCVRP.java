@@ -1,7 +1,7 @@
-package pl.edu.agh.bo.cvrp;
+package magistr.cvrp;
 
-import pl.edu.agh.bo.ants.AntGraph;
-import pl.edu.agh.bo.charts.AntsLineChart;
+import magistr.ants.AntGraph;
+import magistr.charts.AntsLineChart;
 
 import java.io.*;
 import java.nio.file.Files;

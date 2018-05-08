@@ -1,19 +1,19 @@
 /**
  * Created by Mati on 2017-05-09.
  */
-package pl.edu.agh.bo.cvrp;
+package magistr.cvrp;
 
-import pl.edu.agh.bo.ants.Ant;
-import pl.edu.agh.bo.ants.AntColony;
-import pl.edu.agh.bo.ants.AntGraph;
+import magistr.ants.Ant;
+import magistr.ants.AntColony;
+import magistr.ants.AntGraph;
 
 import java.util.Random;
 import java.util.Vector;
 
-import static pl.edu.agh.bo.ants.Ant.s_bestPathVect;
-import static pl.edu.agh.bo.ants.Ant.s_dBestPathValue;
-import static pl.edu.agh.bo.cvrp.AntCVRP.R;
-import static pl.edu.agh.bo.cvrp.AntCVRP.Q;
+import static magistr.ants.Ant.s_bestPathVect;
+import static magistr.ants.Ant.s_dBestPathValue;
+import static magistr.cvrp.AntCVRP.R;
+import static magistr.cvrp.AntCVRP.Q;
 
 public class AntColonyCVRP extends AntColony {
 

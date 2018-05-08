@@ -1,15 +1,15 @@
 /**
  * Created by Mati on 2017-05-09.
  */
-package pl.edu.agh.bo.ants;
+package magistr.ants;
+
+import magistr.cvrp.TestCVRP;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
-
-import static pl.edu.agh.bo.cvrp.TestCVRP.folderName;
 
 public abstract class Ant extends Observable implements Runnable
 {
@@ -65,7 +65,7 @@ public abstract class Ant extends Observable implements Runnable
         {
             try
             {
-                s_outs = new PrintStream(new FileOutputStream(folderName + "\\" + s_antColony.getID()+ "_" + s_antColony.getGraph().nodes() + "x" + s_antColony.getAnts() + "x" + s_antColony.getIterations() + "_ants.txt"));
+                s_outs = new PrintStream(new FileOutputStream(TestCVRP.folderName + "\\" + s_antColony.getID()+ "_" + s_antColony.getGraph().nodes() + "x" + s_antColony.getAnts() + "x" + s_antColony.getIterations() + "_ants.txt"));
             }
             catch(Exception ex)
             {

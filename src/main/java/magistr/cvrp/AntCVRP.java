@@ -1,7 +1,7 @@
-package pl.edu.agh.bo.cvrp;
+package magistr.cvrp;
 
-import pl.edu.agh.bo.ants.Ant;
-import pl.edu.agh.bo.ants.AntGraph;
+import magistr.ants.AntGraph;
+import magistr.ants.Ant;
 
 import java.util.*;
 

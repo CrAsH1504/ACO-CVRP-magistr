@@ -1,4 +1,6 @@
-package pl.edu.agh.bo.ants;
+package magistr.ants;
+
+import magistr.cvrp.TestCVRP;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -7,9 +9,8 @@ import java.util.Observer;
 import java.util.Vector;
 
 
-import static pl.edu.agh.bo.ants.Ant.s_nLastBestPathIteration;
-import static pl.edu.agh.bo.ants.Ant.s_bestPathVect;
-import static pl.edu.agh.bo.cvrp.TestCVRP.folderName;
+import static magistr.ants.Ant.s_nLastBestPathIteration;
+import static magistr.ants.Ant.s_bestPathVect;
 
 
 /**
@@ -47,7 +48,7 @@ public abstract class AntColony implements Observer {
         m_ants = createAnts(m_graph, m_nAnts);
 
         try {
-            m_outs = new PrintStream(new FileOutputStream(folderName + "\\" + m_nID + "_" + m_graph.nodes() + "x" + m_ants.length + "x" + m_nIterations + "_colony.txt"));
+            m_outs = new PrintStream(new FileOutputStream(TestCVRP.folderName + "\\" + m_nID + "_" + m_graph.nodes() + "x" + m_ants.length + "x" + m_nIterations + "_colony.txt"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
