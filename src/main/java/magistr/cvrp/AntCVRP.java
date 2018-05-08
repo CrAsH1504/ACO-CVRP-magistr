@@ -10,9 +10,9 @@ import java.util.*;
  */
 public class AntCVRP extends Ant {
 
-    private static final double A = 0.5;
-    private static final double B = 3;
-    public static final double Q = 6;
+    private static final double A = 1.1;
+    private static final double B = 1.7;
+    public static final double Q = 7;
     public static final double R = 0.7;
     private AntGraph graph;
 
@@ -24,8 +24,8 @@ public class AntCVRP extends Ant {
         super(nStartNode, observer, cap);
     }
 
-    public void init() {
-        super.init();
+    public void init(int curCap) {
+        super.init(m_curCap);
         graph = s_antColony.getGraph();
         m_nodesToVisitTbl = new Hashtable(graph.nodes());
         for (int i = 0; i < graph.nodes(); i++)

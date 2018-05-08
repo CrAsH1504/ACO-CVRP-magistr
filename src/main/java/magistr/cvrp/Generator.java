@@ -16,7 +16,7 @@ public class Generator {
     private Scanner scanner;
     private int dimensions;
     private int cap;
-    private double[][] distanceMatrix;
+    private long[][] distanceMatrix;
     private int[][] cords;
     private int[] demands;
 
@@ -36,7 +36,7 @@ public class Generator {
             String nextLine = scanner.nextLine();
             if(nextLine.split(" ")[0].equals("DIMENSION")){
                 dimensions = Integer.parseInt(nextLine.split(" ")[2]);
-                distanceMatrix = new double[dimensions][dimensions];
+                distanceMatrix = new long[dimensions][dimensions];
                 cords = new int[dimensions][2];
                 demands = new int[dimensions];
             }
@@ -58,7 +58,7 @@ public class Generator {
                             distanceMatrix[i][j] = 0;
                         }
                         else{
-                            distanceMatrix[i][j] = distance(cords[i][0], cords[i][1],cords[j][0], cords[j][1]);
+                            distanceMatrix[i][j] = (long)(distance(cords[i][0], cords[i][1],cords[j][0], cords[j][1]));
                         }
                     }
                 }

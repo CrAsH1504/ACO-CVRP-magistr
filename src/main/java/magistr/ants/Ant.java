@@ -15,11 +15,11 @@ public abstract class Ant extends Observable implements Runnable
 {
     protected int m_nAntID;
 
-    protected int[][]  m_path;
+  //  protected int[][]  m_path;
     protected int m_curCap;
     protected int      m_nCurNode;
     protected int      m_nStartNode;
-    protected double   m_dPathValue;
+    protected long   m_dPathValue;
     protected Observer m_observer;
     protected Vector   m_pathVect;
     protected int      m_iterationCounter;
@@ -29,7 +29,7 @@ public abstract class Ant extends Observable implements Runnable
 
     protected static AntColony s_antColony;
 
-    public static double    s_dBestPathValue = Double.MAX_VALUE;
+    public static long    s_dBestPathValue = Long.MAX_VALUE;
     public static Vector    s_bestPathVect  = null;
     public static int[][]   s_bestPath      = null;
     public static int       s_nLastBestPathIteration = 0;
@@ -42,7 +42,7 @@ public abstract class Ant extends Observable implements Runnable
 
     public static void reset()
     {
-        s_dBestPathValue = Double.MAX_VALUE;
+        s_dBestPathValue = Long.MAX_VALUE;
         s_bestPathVect = null;
         s_bestPath = null;
         s_nLastBestPathIteration = 0;
@@ -59,7 +59,7 @@ public abstract class Ant extends Observable implements Runnable
         m_iterationCounter = 0;
     }
 
-    public void init()
+    public void init(int curCap)
     {
         if(s_outs == null)
         {
@@ -76,17 +76,17 @@ public abstract class Ant extends Observable implements Runnable
         final AntGraph graph = s_antColony.getGraph();
         m_nCurNode   = m_nStartNode;
 
-        m_path      = new int[graph.nodes()][graph.nodes()];
+ //       m_path      = new int[graph.nodes()][graph.nodes()];
         m_pathVect  = new Vector(graph.nodes());
-
+        m_dPathValue = 0;
         m_pathVect.addElement(new Integer(m_nStartNode));
         m_dPathValue = 0;
-        m_curCap = m_maxCap;
+        m_curCap = curCap;
     }
 
     public void start()
     {
-        init();  // начальные данные для муравья
+        init(m_maxCap);  // начальные данные для муравья
         Thread thread = new Thread(this);
         thread.setName("Ant " + m_nAntID);
         thread.start();
@@ -114,7 +114,7 @@ public abstract class Ant extends Observable implements Runnable
 
             // add the current node the list of visited nodes
             m_pathVect.addElement(new Integer(nNewNode));
-            m_path[m_nCurNode][nNewNode] = 1;
+      //      m_path[m_nCurNode][nNewNode] = 1;
 
 
 
@@ -135,7 +135,7 @@ public abstract class Ant extends Observable implements Runnable
             {
 //                localUpdatingRule(m_pathVect);
                 s_dBestPathValue        = m_dPathValue;
-                s_bestPath              = m_path;
+       //         s_bestPath              = m_path;
                 s_bestPathVect          = m_pathVect;
                 s_nLastBestPathIteration = m_iterationCounter;
 
