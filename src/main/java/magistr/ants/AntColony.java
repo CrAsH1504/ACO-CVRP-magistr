@@ -69,6 +69,7 @@ public abstract class AntColony implements Observer {
                 globalUpdatingRule();
             }
         }
+        //тут вставить динамическую адаптацию
 
         if (m_nIterCounter == m_nIterations) {
             m_outs.close();

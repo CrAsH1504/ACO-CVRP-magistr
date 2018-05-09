@@ -31,7 +31,7 @@ public abstract class Ant extends Observable implements Runnable
 
     public static long    s_dBestPathValue = Long.MAX_VALUE;
     public static Vector    s_bestPathVect  = null;
-    public static int[][]   s_bestPath      = null;
+//    public static int[][]   s_bestPath      = null;
     public static int       s_nLastBestPathIteration = 0;
     public static int m_maxCap;
 
@@ -44,7 +44,7 @@ public abstract class Ant extends Observable implements Runnable
     {
         s_dBestPathValue = Long.MAX_VALUE;
         s_bestPathVect = null;
-        s_bestPath = null;
+//        s_bestPath = null;
         s_nLastBestPathIteration = 0;
         s_outs = null;
     }
