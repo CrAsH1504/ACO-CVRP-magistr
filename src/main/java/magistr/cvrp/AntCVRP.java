@@ -1,5 +1,6 @@
 package magistr.cvrp;
 
+import magistr.adaptation.PartPath;
 import magistr.ants.AntGraph;
 import magistr.ants.Ant;
 
@@ -24,13 +25,10 @@ public class AntCVRP extends Ant {
         super(nStartNode, observer, cap);
     }
 
-    public void init(int curCap) {
-        super.init(m_curCap);
+    public void init(PartPath partPath) {
+        super.init(partPath);
         graph = s_antColony.getGraph();
-        m_nodesToVisitTbl = new Hashtable(graph.nodes());
-        for (int i = 0; i < graph.nodes(); i++)
-            m_nodesToVisitTbl.put(i, i);
-        m_nodesToVisitTbl.remove(m_nStartNode);
+        m_nodesToVisitTbl = new Hashtable(partPath.getNodesToVisitTbl());
     }
 
 
@@ -149,7 +147,7 @@ public class AntCVRP extends Ant {
             m_curCap = m_maxCap;
         }
 
-    //  System.out.println("Ant: " + m_nAntID + " makes move: " + m_nCurNode + " -> " + nMaxNode + " iteration: " + m_iterationCounter);
+        //  System.out.println("Ant: " + m_nAntID + " makes move: " + m_nCurNode + " -> " + nMaxNode + " iteration: " + m_iterationCounter);
 
 
         return nMaxNode;

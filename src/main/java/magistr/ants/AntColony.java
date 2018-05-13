@@ -1,5 +1,6 @@
 package magistr.ants;
 
+import magistr.adaptation.PartPath;
 import magistr.cvrp.TestCVRP;
 
 import java.io.FileOutputStream;
@@ -9,6 +10,7 @@ import java.util.Observer;
 import java.util.Vector;
 
 
+import static magistr.ants.Ant.s_dBestPathValue;
 import static magistr.ants.Ant.s_nLastBestPathIteration;
 import static magistr.ants.Ant.s_bestPathVect;
 
@@ -53,35 +55,41 @@ public abstract class AntColony implements Observer {
             ex.printStackTrace();
         }
 
-        // loop for all iterations
-        while (m_nIterCounter < m_nIterations) {
-            // run an iteration
-            iteration();
-            try {
-                wait();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+        PartPath dynamicAdaptaion = new PartPath(m_graph.nodes(), m_capacity);
+
+        while (dynamicAdaptaion.exitCondition()) {
+            // loop for all iterations
+            m_nIterCounter = 0;
+
+            while (m_nIterCounter < m_nIterations) {
+                // run an iteration
+                iteration(dynamicAdaptaion);
+                try {
+                    wait();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+
+                // synchronize the access to the graph
+                synchronized (m_graph) {
+                    // apply global updating rule
+                    globalUpdatingRule();
+                }
             }
 
-            // synchronize the access to the graph
-            synchronized (m_graph) {
-                // apply global updating rule
-                globalUpdatingRule();
-            }
+            dynamicAdaptaion.routeDivision(s_bestPathVect,s_dBestPathValue,m_graph);//тут вставить динамическую адаптацию
         }
-        //тут вставить динамическую адаптацию
-
         if (m_nIterCounter == m_nIterations) {
             m_outs.close();
         }
     }
 
-    private void iteration() {
+    private void iteration(PartPath partPath) {
         m_nAntCounter = 0;
         m_nIterCounter++;
         m_outs.print("Итерация " + m_nIterCounter);
         for (int i = 0; i < m_ants.length; i++) {
-            m_ants[i].start();
+            m_ants[i].start(partPath);
         }
     }
 

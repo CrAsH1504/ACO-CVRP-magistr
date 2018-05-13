@@ -1,5 +1,6 @@
 package magistr.cvrp;
 
+import magistr.adaptation.PartPath;
 import magistr.ants.AntGraph;
 import magistr.charts.AntsLineChart;
 
@@ -27,10 +28,11 @@ public class TestCVRP {
 
 
     public static void main(String[] args) {
-        start(new String[]{"-a","6",
-                            "-i","5000",
+        start(new String[]{"-a","20",
+                            "-i","30",
                             "-r","1",
-                            "-file","E-n22-k4.vrp"
+                            "-file","E-n76-k8.vrp",
+                            "-delta","12"
 
         });
     }
@@ -87,6 +89,8 @@ public class TestCVRP {
                 }
             }  else if (args[i].equals("-showgraph")) {
                 isShowGraph = true;
+            }  else if (args[i].equals("-delta")) {
+                PartPath.setDelta(Integer.parseInt(args[i + 1]));
             }
 
         }

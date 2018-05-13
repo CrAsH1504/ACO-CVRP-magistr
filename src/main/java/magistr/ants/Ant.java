@@ -3,6 +3,7 @@
  */
 package magistr.ants;
 
+import magistr.adaptation.PartPath;
 import magistr.cvrp.TestCVRP;
 
 import java.io.FileOutputStream;
@@ -11,37 +12,34 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
 
-public abstract class Ant extends Observable implements Runnable
-{
+public abstract class Ant extends Observable implements Runnable {
     protected int m_nAntID;
 
-  //  protected int[][]  m_path;
+    //  protected int[][]  m_path;
     protected int m_curCap;
-    protected int      m_nCurNode;
-    protected int      m_nStartNode;
-    protected long   m_dPathValue;
+    protected int m_nCurNode;
+    protected int m_nStartNode;
+    protected long m_dPathValue;
     protected Observer m_observer;
-    protected Vector   m_pathVect;
-    protected int      m_iterationCounter;
+    protected Vector m_pathVect;
+    protected int m_iterationCounter;
 
     private static int s_nAntIDCounter = 0;
     private static PrintStream s_outs;
 
     protected static AntColony s_antColony;
 
-    public static long    s_dBestPathValue = Long.MAX_VALUE;
-    public static Vector    s_bestPathVect  = null;
-//    public static int[][]   s_bestPath      = null;
-    public static int       s_nLastBestPathIteration = 0;
+    public static long s_dBestPathValue = Long.MAX_VALUE;
+    public static Vector s_bestPathVect = null;
+    //    public static int[][]   s_bestPath      = null;
+    public static int s_nLastBestPathIteration = 0;
     public static int m_maxCap;
 
-    public static void setAntColony(AntColony antColony)
-    {
+    public static void setAntColony(AntColony antColony) {
         s_antColony = antColony;
     }
 
-    public static void reset()
-    {
+    public static void reset() {
         s_dBestPathValue = Long.MAX_VALUE;
         s_bestPathVect = null;
 //        s_bestPath = null;
@@ -49,62 +47,51 @@ public abstract class Ant extends Observable implements Runnable
         s_outs = null;
     }
 
-    public Ant(int nStartNode, Observer observer, int cap)
-    {
+    public Ant(int nStartNode, Observer observer, int cap) {
         s_nAntIDCounter++;
-        m_nAntID    = s_nAntIDCounter;
+        m_nAntID = s_nAntIDCounter;
         m_nStartNode = nStartNode;
-        m_observer  = observer;
+        m_observer = observer;
         m_maxCap = cap;
         m_iterationCounter = 0;
     }
 
-    public void init(int curCap)
-    {
-        if(s_outs == null)
-        {
-            try
-            {
-                s_outs = new PrintStream(new FileOutputStream(TestCVRP.folderName + "\\" + s_antColony.getID()+ "_" + s_antColony.getGraph().nodes() + "x" + s_antColony.getAnts() + "x" + s_antColony.getIterations() + "_ants.txt"));
-            }
-            catch(Exception ex)
-            {
+    public void init(PartPath partPath) {
+        if (s_outs == null) {
+            try {
+                s_outs = new PrintStream(new FileOutputStream(TestCVRP.folderName + "\\" + s_antColony.getID() + "_" + s_antColony.getGraph().nodes() + "x" + s_antColony.getAnts() + "x" + s_antColony.getIterations() + "_ants.txt"));
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
         final AntGraph graph = s_antColony.getGraph();
-        m_nCurNode   = m_nStartNode;
+        m_nCurNode = partPath.getCurNode();
 
- //       m_path      = new int[graph.nodes()][graph.nodes()];
-        m_pathVect  = new Vector(graph.nodes());
-        m_dPathValue = 0;
-        m_pathVect.addElement(new Integer(m_nStartNode));
-        m_dPathValue = 0;
-        m_curCap = curCap;
+        //       m_path      = new int[graph.nodes()][graph.nodes()];
+        m_pathVect = new Vector(graph.nodes());
+        m_pathVect.addAll(partPath.getPartPathVect());
+        m_dPathValue = partPath.getPartPathValue();
+        m_curCap = partPath.getCurCup();
     }
 
-    public void start()
-    {
-        init(m_maxCap);  // начальные данные для муравья
+    public void start(PartPath partPath) {
+        init(partPath);  // начальные данные для муравья
         Thread thread = new Thread(this);
         thread.setName("Ant " + m_nAntID);
         thread.start();
     }
 
-    public void run()
-    {
+    public void run() {
         m_iterationCounter++;
         final AntGraph graph = s_antColony.getGraph();
 
         // repeat while End of Activity Rule returns false
-        while(!end())
-        {
+        while (!end()) {
             int nNewNode;
 
             // synchronize the access to the graph
-            synchronized(graph)
-            {
+            synchronized (graph) {
                 // apply the State Transition Rule
                 nNewNode = stateTransitionRule(m_nCurNode);
 
@@ -114,29 +101,25 @@ public abstract class Ant extends Observable implements Runnable
 
             // add the current node the list of visited nodes
             m_pathVect.addElement(new Integer(nNewNode));
-      //      m_path[m_nCurNode][nNewNode] = 1;
-
+            //      m_path[m_nCurNode][nNewNode] = 1;
 
 
             // update the current node
             m_nCurNode = nNewNode;
         }
 
-        synchronized(graph)
-        {
+        synchronized (graph) {
             // apply the Local Updating Rule
             localUpdatingRule(m_pathVect, m_dPathValue);
         }
 
-        synchronized(graph)
-        {
+        synchronized (graph) {
             // update the best tour value
-            if(better(m_dPathValue, s_dBestPathValue))
-            {
+            if (better(m_dPathValue, s_dBestPathValue)) {
 //                localUpdatingRule(m_pathVect);
-                s_dBestPathValue        = m_dPathValue;
-       //         s_bestPath              = m_path;
-                s_bestPathVect          = m_pathVect;
+                s_dBestPathValue = m_dPathValue;
+                //         s_bestPath              = m_path;
+                s_bestPathVect = m_pathVect;
                 s_nLastBestPathIteration = m_iterationCounter;
 
                 s_outs.println("Ant " + m_nAntID + ", Лучшая длина " + s_dBestPathValue + ", Итерация " + s_nLastBestPathIteration + ", длина " + s_bestPathVect.size() + ", маршрут" + s_bestPathVect);
@@ -146,7 +129,7 @@ public abstract class Ant extends Observable implements Runnable
         // update the observer
         m_observer.update(this, null);
 
-        if(s_antColony.done())
+        if (s_antColony.done())
             s_outs.close();
     }
 
@@ -158,12 +141,10 @@ public abstract class Ant extends Observable implements Runnable
 
     public abstract boolean end();
 
-    public static int[] getBestPath()
-    {
+    public static int[] getBestPath() {
         int nBestPathArray[] = new int[s_bestPathVect.size()];
-        for(int i = 0; i < s_bestPathVect.size(); i++)
-        {
-            nBestPathArray[i] = ((Integer)s_bestPathVect.elementAt(i)).intValue();
+        for (int i = 0; i < s_bestPathVect.size(); i++) {
+            nBestPathArray[i] = ((Integer) s_bestPathVect.elementAt(i)).intValue();
         }
 
         return nBestPathArray;
@@ -181,8 +162,7 @@ public abstract class Ant extends Observable implements Runnable
         return m_iterationCounter;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "Ant " + m_nAntID + ":" + m_nCurNode;
     }
 }

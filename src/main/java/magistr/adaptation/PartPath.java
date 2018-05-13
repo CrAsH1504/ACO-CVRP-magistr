@@ -7,31 +7,35 @@ import java.util.Vector;
 
 public class PartPath {
 
-    long fullPathValue = Long.MAX_VALUE;
-    Vector fullPathVect = null;
-    Hashtable nodesToVisitTbl;
+    private long fullPathValue = Long.MAX_VALUE;
+    private Vector fullPathVect = null;
+    private Hashtable nodesToVisitTbl;
 
-    long partPathValue;
-    Vector partPathVect;
-    int curNode;
-    int posintionOnPath;
-    int curCup;
-    int maxCup;
+    private long partPathValue;
+    private Vector partPathVect;
+    private int curNode;
+    private int posintionOnPath;
+    private int curCup;
+    private int maxCup;
 
-    static int delta;
-    static int part;
+    private static int delta;
+    private static int part;
+    private static int iterate;
 
 
-    PartPath(int delta, int nodes, int capacity) {
-        this.delta = delta;
+    public PartPath(int nodes, int capacity) {
         part = 0;
+        iterate = 0;
         partPathVect = new Vector();
-        posintionOnPath = 0;
+        posintionOnPath = 1;
         partPathValue = 0;
         curNode = 0;
         maxCup = capacity;
+        curCup = capacity;
+        nodesToVisitTbl = new Hashtable();
         for (int i = 0; i < nodes; i++)
             nodesToVisitTbl.put(i, i);
+        partPathVect.add(0);
         nodesToVisitTbl.remove(0);
 
 
@@ -42,8 +46,8 @@ public class PartPath {
             fullPathValue = solvePathValue;
             fullPathVect = solvePathVect;
         }
-        part++;
-        if (part > delta) {
+        ricePart();
+        if (part >= delta) {
             return;
         }
         double measure = fullPathVect.size() * part * 1.0 / delta;
@@ -65,5 +69,43 @@ public class PartPath {
 
     }
 
+    public boolean exitCondition() {
+        return part < delta;
+    }
 
+    ;
+
+    public static void setDelta(int delta) {
+        PartPath.delta = delta;
+    }
+
+    static void ricePart() {
+        iterate++;
+        part = iterate;  //равномерное деление
+        // part = (1 + iterate) * iterate / 2;  // по арифмитической прогррессии
+    }
+
+    public Hashtable getNodesToVisitTbl() {
+        return nodesToVisitTbl;
+    }
+
+    public long getPartPathValue() {
+        return partPathValue;
+    }
+
+    public Vector getPartPathVect() {
+        return partPathVect;
+    }
+
+    public int getCurNode() {
+        return curNode;
+    }
+
+    public int getCurCup() {
+        return curCup;
+    }
+
+    public int getMaxCup() {
+        return maxCup;
+    }
 }
