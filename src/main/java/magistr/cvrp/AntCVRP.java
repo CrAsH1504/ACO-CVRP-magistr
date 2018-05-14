@@ -1,14 +1,15 @@
 package magistr.cvrp;
 
 import magistr.adaptation.PartPath;
-import magistr.ants.AntGraph;
 import magistr.ants.Ant;
+import magistr.ants.AntGraph;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Observer;
+import java.util.Random;
+import java.util.Vector;
 
-/**
- * Created by Mati on 2017-05-09.
- */
 public class AntCVRP extends Ant {
 
     private static final double A = 1.1;
@@ -167,8 +168,8 @@ public class AntCVRP extends Ant {
             int nextVertex = (int) path.get(i);
             double val = graph.tau(currVertex, nextVertex) + Q / (R * length);
             graph.updateTau(currVertex, nextVertex, val);
-            double val2 = graph.tau( nextVertex,currVertex) + Q / (R * length);
-            graph.updateTau(nextVertex, currVertex , val2);
+            double val2 = graph.tau(nextVertex, currVertex) + Q / (R * length);
+            graph.updateTau(nextVertex, currVertex, val2);
         }
     }
 

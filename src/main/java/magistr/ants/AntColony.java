@@ -1,6 +1,7 @@
 package magistr.ants;
 
 import magistr.adaptation.PartPath;
+import magistr.adaptation.StabilitySolution;
 import magistr.cvrp.TestCVRP;
 
 import java.io.FileOutputStream;
@@ -9,15 +10,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
 
-
+import static magistr.ants.Ant.s_bestPathVect;
 import static magistr.ants.Ant.s_dBestPathValue;
 import static magistr.ants.Ant.s_nLastBestPathIteration;
-import static magistr.ants.Ant.s_bestPathVect;
-
-
-/**
- * Created by Mati on 2017-05-09.
- */
 
 
 public abstract class AntColony implements Observer {
@@ -56,32 +51,48 @@ public abstract class AntColony implements Observer {
         }
 
         PartPath dynamicAdaptaion = new PartPath(m_graph.nodes(), m_capacity);
-
-        while (dynamicAdaptaion.exitCondition()) {
-            // loop for all iterations
-            m_nIterCounter = 0;
-
-            while (m_nIterCounter < m_nIterations) {
-                // run an iteration
-                iteration(dynamicAdaptaion);
-                try {
-                    wait();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-
-                // synchronize the access to the graph
-                synchronized (m_graph) {
-                    // apply global updating rule
-                    globalUpdatingRule();
-                }
+        StabilitySolution.createSchet(); //создаем счетсчик для не устойчивых решений
+        for (int i = 0; i < StabilitySolution.repeat; i++) { //счетсчик провер одного решения решения
+            if (dynamicAdaptaion.getFullPathVect() != null) {
+                dynamicAdaptaion = PartPath.prepareCheckStability(m_graph.nodes(), m_capacity, m_graph);
+                m_graph.resetTau(); //сброс феромонов
+                s_dBestPathValue = PartPath.getFullPathValue();
+                s_bestPathVect = dynamicAdaptaion.getFullPathVect();
             }
 
-            dynamicAdaptaion.routeDivision(s_bestPathVect,s_dBestPathValue,m_graph);//тут вставить динамическую адаптацию
+            StabilitySolution.flagReset = false;
+            while (dynamicAdaptaion.exitCondition()) {
+                // loop for all iterations
+                m_nIterCounter = 0;
+
+                while (m_nIterCounter < m_nIterations) {
+                    // run an iteration
+                    iteration(dynamicAdaptaion);
+                    try {
+                        wait();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    // synchronize the access to the graph
+                    synchronized (m_graph) {
+                        // apply global updating rule
+                        globalUpdatingRule();
+                    }
+                    if (StabilitySolution.flagReset){
+                        m_nIterCounter = m_nIterations;
+                    }
+                }
+                if (dynamicAdaptaion.getFullPathVect() == null) {
+                    StabilitySolution.flagStart = true;
+                    dynamicAdaptaion.routeDivision(s_bestPathVect, s_dBestPathValue, m_graph); //при первом прогоне получаем одно решение и запоминаем
+                } else {
+                    dynamicAdaptaion.checkStabilitySolution(s_dBestPathValue, m_graph); //провери устойчивость решения
+                }
+
+            }
         }
-        if (m_nIterCounter == m_nIterations) {
-            m_outs.close();
-        }
+        m_outs.close();
     }
 
     private void iteration(PartPath partPath) {

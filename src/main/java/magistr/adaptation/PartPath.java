@@ -7,9 +7,9 @@ import java.util.Vector;
 
 public class PartPath {
 
-    private long fullPathValue = Long.MAX_VALUE;
-    private Vector fullPathVect = null;
-    private Hashtable nodesToVisitTbl;
+    private static long fullPathValue = Long.MAX_VALUE;
+    private static Vector fullPathVect = null;
+    private static Hashtable nodesToVisitTbl;
 
     private long partPathValue;
     private Vector partPathVect;
@@ -37,7 +37,21 @@ public class PartPath {
             nodesToVisitTbl.put(i, i);
         partPathVect.add(0);
         nodesToVisitTbl.remove(0);
+    }
 
+    public static PartPath prepareCheckStability(int nodes, int capacity, AntGraph graph){
+        PartPath startDate = new PartPath(nodes,capacity);
+        startDate.dynamicStep(graph);
+        return startDate;
+    }
+
+    public void checkStabilitySolution(long solvePathValue, AntGraph graph) {
+        if (solvePathValue < fullPathValue) { //если не устойчиво отмечаем шаг и сбрасываем текущую попытку
+            StabilitySolution.updateSchet(part);
+            PartPath.part = PartPath.delta;
+        } else {
+            dynamicStep(graph); //продолжаем проверку устойчивости
+        }
 
     }
 
@@ -46,6 +60,10 @@ public class PartPath {
             fullPathValue = solvePathValue;
             fullPathVect = solvePathVect;
         }
+        dynamicStep(graph);
+    }
+
+    void dynamicStep(AntGraph graph) {
         ricePart();
         if (part >= delta) {
             return;
@@ -65,7 +83,6 @@ public class PartPath {
             posintionOnPath++;
 
         }
-
 
     }
 
@@ -107,5 +124,21 @@ public class PartPath {
 
     public int getMaxCup() {
         return maxCup;
+    }
+
+    public Vector getFullPathVect() {
+        return fullPathVect;
+    }
+
+    public static long getFullPathValue() {
+        return fullPathValue;
+    }
+
+    public static void setFullPathValue(long fullPathValue) {
+        PartPath.fullPathValue = fullPathValue;
+    }
+
+    public static void setFullPathVect(Vector fullPathVect) {
+        PartPath.fullPathVect = fullPathVect;
     }
 }

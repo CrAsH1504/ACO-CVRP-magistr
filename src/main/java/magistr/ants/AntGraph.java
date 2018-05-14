@@ -1,9 +1,6 @@
-/**
- * Created by Mati on 2017-05-09.
- */
 package magistr.ants;
 
-import java.io.*;
+import java.io.Serializable;
 
 public class AntGraph implements Serializable {
     private double[][] m_delta;

@@ -1,9 +1,7 @@
-/**
- * Created by Mati on 2017-05-09.
- */
 package magistr.ants;
 
 import magistr.adaptation.PartPath;
+import magistr.adaptation.StabilitySolution;
 import magistr.cvrp.TestCVRP;
 
 import java.io.FileOutputStream;
@@ -117,6 +115,9 @@ public abstract class Ant extends Observable implements Runnable {
             // update the best tour value
             if (better(m_dPathValue, s_dBestPathValue)) {
 //                localUpdatingRule(m_pathVect);
+                if (StabilitySolution.flagStart){
+                    StabilitySolution.flagReset = true;
+                }
                 s_dBestPathValue = m_dPathValue;
                 //         s_bestPath              = m_path;
                 s_bestPathVect = m_pathVect;

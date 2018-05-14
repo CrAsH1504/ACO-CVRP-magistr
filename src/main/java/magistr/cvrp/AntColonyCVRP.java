@@ -1,6 +1,3 @@
-/**
- * Created by Mati on 2017-05-09.
- */
 package magistr.cvrp;
 
 import magistr.ants.Ant;
@@ -12,8 +9,8 @@ import java.util.Vector;
 
 import static magistr.ants.Ant.s_bestPathVect;
 import static magistr.ants.Ant.s_dBestPathValue;
-import static magistr.cvrp.AntCVRP.R;
 import static magistr.cvrp.AntCVRP.Q;
+import static magistr.cvrp.AntCVRP.R;
 
 public class AntColonyCVRP extends AntColony {
 
@@ -53,8 +50,8 @@ public class AntColonyCVRP extends AntColony {
             int nextVertex = (int) path.get(i);
             double val = graph.tau(currVertex, nextVertex) + Q / s_dBestPathValue;
             graph.updateTau(currVertex, nextVertex, val);
-            double val2 = graph.tau( nextVertex,currVertex) + Q / s_dBestPathValue;
-            graph.updateTau(nextVertex, currVertex , val2);
+            double val2 = graph.tau(nextVertex, currVertex) + Q / s_dBestPathValue;
+            graph.updateTau(nextVertex, currVertex, val2);
         }
 
     }

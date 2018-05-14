@@ -1,19 +1,22 @@
 package magistr.cvrp;
 
 import magistr.adaptation.PartPath;
+import magistr.adaptation.StabilitySolution;
 import magistr.ants.AntGraph;
 import magistr.charts.AntsLineChart;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.stream.Stream;
 
-/**
- * Created by Mati on 2017-05-21.
- */
+
 public class TestCVRP {
     private static Random s_ran = new Random(System.currentTimeMillis());
 
@@ -28,11 +31,12 @@ public class TestCVRP {
 
 
     public static void main(String[] args) {
-        start(new String[]{"-a","20",
-                            "-i","30",
-                            "-r","1",
-                            "-file","E-n76-k8.vrp",
-                            "-delta","12"
+        start(new String[]{"-a", "76",
+                "-i", "100",
+                "-r", "2",
+                "-file", "E-n76-k8.vrp",
+                "-delta", "10",
+                "-stability", "10"
 
         });
     }
@@ -87,10 +91,13 @@ public class TestCVRP {
                 } catch (java.io.IOException ex) {
                     System.out.println("input file not found");
                 }
-            }  else if (args[i].equals("-showgraph")) {
+            } else if (args[i].equals("-showgraph")) {
                 isShowGraph = true;
-            }  else if (args[i].equals("-delta")) {
+            } else if (args[i].equals("-delta")) {
                 PartPath.setDelta(Integer.parseInt(args[i + 1]));
+                StabilitySolution.setDelta(Integer.parseInt(args[i + 1]));
+            } else if (args[i].equals("-stability")) {
+                StabilitySolution.setRepeat(Integer.parseInt(args[i + 1]));
             }
 
         }
@@ -133,17 +140,20 @@ public class TestCVRP {
 
                 graph.resetTau();
                 AntColonyCVRP antColony = new AntColonyCVRP(graph, nAnts, nIterations, capacity);
+                PartPath.setFullPathValue(Long.MAX_VALUE);
+                PartPath.setFullPathVect(null);
 
                 long begin = System.currentTimeMillis();
+                StabilitySolution.flagStart = false;
                 antColony.start();
-                outs2.println(i + "," + antColony.getBestPathValue() + "," + antColony.getLastBestPathIteration());
+                outs2.println(i + "," + PartPath.getFullPathValue() + "," + antColony.getLastBestPathIteration() + ", " + StabilitySolution.printTable());
                 totalTime += System.currentTimeMillis() - begin;
 
                 if (isShowGraph) {
-                    AntsLineChart.showGraph("" + (i + 1) + "_" + nNodes +"x"+nAnts+"x"+nIterations+"_colony.txt");
+                    AntsLineChart.showGraph("" + (i + 1) + "_" + nNodes + "x" + nAnts + "x" + nIterations + "_colony.txt");
                 }
             }
-            System.out.printf("\nAverage time: %.2f", ((double)totalTime) / 1000.0);
+            System.out.printf("\nAverage time: %.2f", ((double) totalTime) / 1000.0);
             outs2.close();
         } catch (Exception ex) {
         }
