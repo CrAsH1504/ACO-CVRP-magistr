@@ -60,7 +60,7 @@ public abstract class AntColony implements Observer {
         while (dynamicAdaptaion.exitCondition()) {
             // loop for all iterations
             m_nIterCounter = 0;
-
+            m_graph.resetTau();
             while (m_nIterCounter < m_nIterations) {
                 // run an iteration
                 iteration(dynamicAdaptaion);
