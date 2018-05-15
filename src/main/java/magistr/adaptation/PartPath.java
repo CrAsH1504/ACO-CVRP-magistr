@@ -41,6 +41,8 @@ public class PartPath {
 
     public static PartPath prepareCheckStability(int nodes, int capacity, AntGraph graph){
         PartPath startDate = new PartPath(nodes,capacity);
+        fullPathValue = StabilitySolution.getFullPathValue();
+        fullPathVect = StabilitySolution.getFullPathVect();
         startDate.dynamicStep(graph);
         return startDate;
     }

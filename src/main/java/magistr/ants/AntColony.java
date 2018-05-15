@@ -52,19 +52,19 @@ public abstract class AntColony implements Observer {
 
         PartPath dynamicAdaptaion = new PartPath(m_graph.nodes(), m_capacity);
         StabilitySolution.createSchet(); //создаем счетсчик для не устойчивых решений
-        for (int i = 0; i < StabilitySolution.repeat; i++) { //счетсчик провер одного решения решения
-            if (dynamicAdaptaion.getFullPathVect() != null) {
+        for (int i = 0; i < StabilitySolution.repeat + 1; i++) { //счетсчик провер одного решения решения
+            if (StabilitySolution.getFullPathVect() != null) {
                 dynamicAdaptaion = PartPath.prepareCheckStability(m_graph.nodes(), m_capacity, m_graph);
-                m_graph.resetTau(); //сброс феромонов
-                s_dBestPathValue = PartPath.getFullPathValue();
-                s_bestPathVect = dynamicAdaptaion.getFullPathVect();
+                 //сброс феромонов
+                s_dBestPathValue = StabilitySolution.getFullPathValue();
+                s_bestPathVect = StabilitySolution.getFullPathVect();
             }
 
             StabilitySolution.flagReset = false;
             while (dynamicAdaptaion.exitCondition()) {
                 // loop for all iterations
                 m_nIterCounter = 0;
-
+                m_graph.resetTau();
                 while (m_nIterCounter < m_nIterations) {
                     // run an iteration
                     iteration(dynamicAdaptaion);
@@ -83,13 +83,17 @@ public abstract class AntColony implements Observer {
                         m_nIterCounter = m_nIterations;
                     }
                 }
-                if (dynamicAdaptaion.getFullPathVect() == null) {
-                    StabilitySolution.flagStart = true;
+                if (!StabilitySolution.flagStart) {
                     dynamicAdaptaion.routeDivision(s_bestPathVect, s_dBestPathValue, m_graph); //при первом прогоне получаем одно решение и запоминаем
                 } else {
                     dynamicAdaptaion.checkStabilitySolution(s_dBestPathValue, m_graph); //провери устойчивость решения
                 }
 
+            }
+            if (StabilitySolution.getFullPathVect() == null){
+                StabilitySolution.flagStart = true;
+                StabilitySolution.setFullPathValue(s_dBestPathValue);
+                StabilitySolution.setFullPathVect(s_bestPathVect);
             }
         }
         m_outs.close();

@@ -140,6 +140,8 @@ public class TestCVRP {
 
                 graph.resetTau();
                 AntColonyCVRP antColony = new AntColonyCVRP(graph, nAnts, nIterations, capacity);
+                StabilitySolution.setFullPathValue(Long.MAX_VALUE);
+                StabilitySolution.setFullPathVect(null);
                 PartPath.setFullPathValue(Long.MAX_VALUE);
                 PartPath.setFullPathVect(null);
 
