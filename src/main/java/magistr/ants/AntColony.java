@@ -55,7 +55,6 @@ public abstract class AntColony implements Observer {
         for (int i = 0; i < StabilitySolution.repeat; i++) { //счетсчик провер одного решения решения
             if (dynamicAdaptaion.getFullPathVect() != null) {
                 dynamicAdaptaion = PartPath.prepareCheckStability(m_graph.nodes(), m_capacity, m_graph);
-                m_graph.resetTau(); //сброс феромонов
                 s_dBestPathValue = PartPath.getFullPathValue();
                 s_bestPathVect = dynamicAdaptaion.getFullPathVect();
             }
@@ -64,7 +63,7 @@ public abstract class AntColony implements Observer {
             while (dynamicAdaptaion.exitCondition()) {
                 // loop for all iterations
                 m_nIterCounter = 0;
-
+                m_graph.resetTau(); //сброс феромонов
                 while (m_nIterCounter < m_nIterations) {
                     // run an iteration
                     iteration(dynamicAdaptaion);
