@@ -130,8 +130,8 @@ public abstract class Ant extends Observable implements Runnable {
         // update the observer
         m_observer.update(this, null);
 
-        if (s_antColony.done())
-            s_outs.close();
+       /* if (s_antColony.done())
+            s_outs.close();*/
     }
 
     protected abstract boolean better(double dPathValue, double dBestPathValue);
