@@ -89,13 +89,13 @@ public abstract class Ant extends Observable implements Runnable {
             int nNewNode;
 
             // synchronize the access to the graph
-            synchronized (graph) {
+         //   synchronized (graph) {
                 // apply the State Transition Rule
                 nNewNode = stateTransitionRule(m_nCurNode);
 
                 // update the length of the path
                 m_dPathValue += graph.delta(m_nCurNode, nNewNode);
-            }
+         //   }
 
             // add the current node the list of visited nodes
             m_pathVect.addElement(new Integer(nNewNode));
