@@ -12,10 +12,10 @@ import java.util.Vector;
 
 public class AntCVRP extends Ant {
 
-    private static final double A = 1.1;
-    private static final double B = 1.7;
-    public static final double Q = 7;
-    public static final double R = 0.7;
+    private static final double A = 1.04;
+    private static final double B = 1.5;
+    public static final double Q = 4;
+    public static final double R = 0.74;
     private AntGraph graph;
 
     private static final Random s_randGen = new Random(System.currentTimeMillis());
