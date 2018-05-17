@@ -31,10 +31,10 @@ public class TestCVRP {
 
 
     public static void main(String[] args) {
-        start(new String[]{"-a", "76",
+        start(new String[]{"-a", "200",
                 "-i", "100",
-                "-r", "2",
-                "-file", "E-n76-k8.vrp",
+                "-r", "25",
+                "-file", "M-n200-k17.vrp",
                 "-delta", "10",
                 "-stability", "10"
 
