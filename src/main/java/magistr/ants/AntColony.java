@@ -10,52 +10,48 @@ import java.util.Observer;
 import java.util.Vector;
 
 
-import static magistr.ants.Ant.s_dBestPathValue;
-import static magistr.ants.Ant.s_nLastBestPathIteration;
-import static magistr.ants.Ant.s_bestPathVect;
+import static magistr.ants.Ant.bestPathValue;
+import static magistr.ants.Ant.lastBestPathIteration;
+import static magistr.ants.Ant.bestPathVect;
 
 public abstract class AntColony implements Observer {
-    protected PrintStream m_outs;
+    protected PrintStream outs;
 
-    protected AntGraph m_graph;
-    protected Ant[] m_ants;
-    protected int m_nAnts;
-    protected int m_nAntCounter;
-    protected int m_nIterCounter;
-    protected int m_nIterations;
-    protected int m_capacity;
+    protected AntGraph graph;
+    protected Ant[] ants;
+    protected int numAnts;
+    protected int numAntCounter;
+    protected int iterCounter;
+    protected int numIterat;
+    protected int capacity;
 
-    private int m_nID;
+    private int id;
 
-    private static int s_nIDCounter = 0;
+    private static int iDCounter = 0;
 
     public AntColony(AntGraph graph, int nAnts, int nIterations, int capacity) {
-        m_graph = graph;
-        m_nAnts = nAnts;
-        m_nIterations = nIterations;
-        s_nIDCounter++;
-        m_nID = s_nIDCounter;
-        m_capacity = capacity;
-        m_nIterCounter = 0;
+        this.graph = graph;
+        numAnts = nAnts;
+        numIterat = nIterations;
+        iDCounter++;
+        id = iDCounter;
+        this.capacity = capacity;
+        iterCounter = 0;
     }
 
     public synchronized void start() {
-        // creates all ants
-        m_ants = createAnts(m_graph, m_nAnts);
-
+        ants = createAnts(graph, numAnts);
         try {
-            m_outs = new PrintStream(new FileOutputStream(TestCVRP.folderName + "\\" + m_nID + "_" + m_graph.nodes() + "x" + m_ants.length + "x" + m_nIterations + "_colony.txt"));
+            outs = new PrintStream(new FileOutputStream(TestCVRP.folderName + "\\" + id + "_" + graph.nodes() + "x" + ants.length + "x" + numIterat + "_colony.txt"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        PartPath dynamicAdaptaion = new PartPath(m_graph.nodes(), m_capacity);
-
+        PartPath dynamicAdaptaion = new PartPath(graph.nodes(), capacity);
         while (dynamicAdaptaion.exitCondition()) {
             // loop for all iterations
-            m_nIterCounter = 0;
-            m_graph.resetTau();
-            while (m_nIterCounter < m_nIterations) {
+            iterCounter = 0;
+            graph.resetTau();
+            while (iterCounter < numIterat) {
                 // run an iteration
                 iteration(dynamicAdaptaion);
                 try {
@@ -63,91 +59,72 @@ public abstract class AntColony implements Observer {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-
-                // synchronize the access to the graph
-                synchronized (m_graph) {
-                    // apply global updating rule
+                synchronized (graph) {
                     globalUpdatingRule();
                 }
             }
-
-            dynamicAdaptaion.routeDivision(s_bestPathVect,s_dBestPathValue,m_graph);//тут вставить динамическую адаптацию
+            dynamicAdaptaion.routeDivision(bestPathVect, bestPathValue, graph);//тут вставить динамическую адаптацию
         }
-        if (m_nIterCounter == m_nIterations) {
-            m_outs.close();
+        if (iterCounter == numIterat) {
+            outs.close();
         }
     }
 
     private void iteration(PartPath partPath) {
-        m_nAntCounter = 0;
-        m_nIterCounter++;
-        m_outs.print("Итерация " + m_nIterCounter);
-        for (int i = 0; i < m_ants.length; i++) {
-            m_ants[i].start(partPath);
+        numAntCounter = 0;
+        iterCounter++;
+        outs.print("Итерация " + iterCounter);
+        for (int i = 0; i < ants.length; i++) {
+            ants[i].start(partPath);
         }
     }
 
     public AntGraph getGraph() {
-        return m_graph;
+        return graph;
     }
 
     public int getAnts() {
-        return m_ants.length;
+        return ants.length;
     }
 
     public int getIterations() {
-        return m_nIterations;
-    }
-
-    public int getIterationCounter() {
-        return m_nIterCounter;
+        return numIterat;
     }
 
     public int getID() {
-        return m_nID;
+        return id;
     }
 
     public synchronized void update(Observable ant, Object obj) {
-        m_outs.print("; " + ((Ant) ant).m_dPathValue);
-        m_nAntCounter++;
+        outs.print("; " + ((Ant) ant).pathValue);
+        numAntCounter++;
 
-        if (m_nAntCounter == m_ants.length) {
-            m_outs.println("; iteration: " + Ant.s_nLastBestPathIteration + "; result: " + Ant.s_dBestPathValue);
-
+        if (numAntCounter == ants.length) {
+            outs.println("; iteration: " + Ant.lastBestPathIteration + "; result: " + Ant.bestPathValue);
             System.out.println("---------------------------");
-            System.out.println(m_nIterCounter + " - Best Path: " + Ant.s_dBestPathValue);
+            System.out.println(iterCounter + " - Best Path: " + Ant.bestPathValue);
             System.out.println("---------------------------");
             System.out.println("Path seq: ");
-            for (int i = 0; i < Ant.s_bestPathVect.size(); i++) {
-                System.out.print(Ant.s_bestPathVect.get(i));
+            for (int i = 0; i < Ant.bestPathVect.size(); i++) {
+                System.out.print(Ant.bestPathVect.get(i));
                 System.out.print(" ");
             }
             System.out.println("\n");
-
-
             notify();
 
         }
     }
 
     public double getBestPathValue() {
-        return Ant.s_dBestPathValue;
-    }
-
-    public int[] getBestPath() {
-        return Ant.getBestPath();
-    }
-
-    public Vector getBestPathVector() {
-        return s_bestPathVect;
+        return Ant.bestPathValue;
     }
 
     public int getLastBestPathIteration() {
-        return s_nLastBestPathIteration;
+        return lastBestPathIteration;
     }
 
     public boolean done() {
-        return m_nIterCounter == m_nIterations;
+        return iterCounter == numIterat;
     }
 
     protected abstract Ant[] createAnts(AntGraph graph, int ants);

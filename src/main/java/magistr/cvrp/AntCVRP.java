@@ -24,86 +24,19 @@ public class AntCVRP extends Ant {
 
     public void init(PartPath partPath) {
         super.init(partPath);
-        graph = s_antColony.getGraph();
+        graph = antColony.getGraph();
         m_nodesToVisitTbl = new Hashtable(partPath.getNodesToVisitTbl());
     }
 
 
     @Override
     public int stateTransitionRule(int r) {
-        // graph = s_antColony.getGraph();
+        // graph = antColony.getGraph();
         /*if (s_randGen.nextDouble() <= Q0) {
             return exploitation();
         }
         return exploration();*/
         return chooseNext();
-    }
-
-    private int exploration() {
-        int nMaxNode = 0;
-        double dSum = 0;
-        int nNode = 0;
-
-        Enumeration en = m_nodesToVisitTbl.elements();
-        while (en.hasMoreElements()) {
-            nNode = ((Integer) en.nextElement());
-//            if(graph.tau(m_nCurNode, nNode) == 0)
-//                continue;
-
-            dSum += hValue(nNode);
-        }
-
-//        if(dSum == 0)
-//            throw new RuntimeException("SUM = 0");
-
-        double dAverage = dSum / (double) m_nodesToVisitTbl.size();
-
-        en = m_nodesToVisitTbl.elements();
-        while (en.hasMoreElements()) {
-            nNode = ((Integer) en.nextElement()).intValue();
-
-            double p = hValue(nNode) / dSum;
-
-            if (hValue(nNode) > dAverage && graph.demand(nNode) <= m_curCap) {
-                nMaxNode = nNode;
-                break;
-            }
-        }
-        if (nMaxNode != 0) {
-            m_nodesToVisitTbl.remove(new Integer(nMaxNode));
-            m_curCap -= graph.demand(nMaxNode);
-        } else {
-            m_curCap = m_maxCap;
-        }
-        System.out.println("Ant: " + m_nAntID + " makes move: " + m_nCurNode + " -> " + nMaxNode + " iteration: " + m_iterationCounter);
-        return nMaxNode;
-    }
-
-    private int exploitation() {
-        int nMaxNode = 0;
-        double dMaxVal = -1;
-        double dVal;
-        int nNode;
-
-        Enumeration en = m_nodesToVisitTbl.elements();
-        while (en.hasMoreElements()) {
-            nNode = ((Integer) en.nextElement());
-
-            dVal = hValue(nNode);
-
-            if (dVal > dMaxVal && graph.demand(nNode) <= m_curCap) {
-                dMaxVal = dVal;
-                nMaxNode = nNode;
-            }
-        }
-        if (nMaxNode != 0) {
-            m_nodesToVisitTbl.remove(nMaxNode);
-            m_curCap -= graph.demand(nMaxNode);
-        } else {
-            m_curCap = m_maxCap;
-        }
-        System.out.println("Ant: " + m_nAntID + " makes move: " + m_nCurNode + " -> " + nMaxNode + " iteration: " + m_iterationCounter);
-        return nMaxNode;
     }
 
     private int chooseNext() {
@@ -114,7 +47,7 @@ public class AntCVRP extends Ant {
         Enumeration en = m_nodesToVisitTbl.elements();
         while (en.hasMoreElements()) {
             nNode = ((int) en.nextElement());
-            if (graph.demand(nNode) <= m_curCap) {
+            if (graph.demand(nNode) <= curCapac) {
                 nodesToPosibleVisitTbl.put(nNode, nNode);
                 dSum += hValue(nNode);
             }
@@ -139,12 +72,12 @@ public class AntCVRP extends Ant {
 
         if (nMaxNode != 0) {
             m_nodesToVisitTbl.remove(new Integer(nMaxNode));
-            m_curCap -= graph.demand(nMaxNode);
+            curCapac -= graph.demand(nMaxNode);
         } else {
-            m_curCap = m_maxCap;
+            curCapac = maxCap;
         }
 
-        //  System.out.println("Ant: " + m_nAntID + " makes move: " + m_nCurNode + " -> " + nMaxNode + " iteration: " + m_iterationCounter);
+        //  System.out.println("Ant: " + numAntID + " makes move: " + curNode + " -> " + nMaxNode + " iteration: " + intCounter);
 
 
         return nMaxNode;
@@ -152,13 +85,13 @@ public class AntCVRP extends Ant {
 
 
     private double hValue(int nNode) {
-        double value = Math.pow(graph.tau(m_nCurNode, nNode), A) * Math.pow(graph.etha(m_nCurNode, nNode), B);
+        double value = Math.pow(graph.tau(curNode, nNode), A) * Math.pow(graph.etha(curNode, nNode), B);
         return value == 0 ? Double.MIN_VALUE : value;
     }
 
     @Override
     public void localUpdatingRule(Vector path, double length) {
-        final AntGraph graph = s_antColony.getGraph();
+        final AntGraph graph = antColony.getGraph();
         for (int i = 1; i < path.size(); i++) {
             int currVertex = (int) path.get(i - 1);
             int nextVertex = (int) path.get(i);
@@ -176,6 +109,6 @@ public class AntCVRP extends Ant {
 
     @Override
     public boolean end() {
-        return m_nodesToVisitTbl.isEmpty() && m_nCurNode == m_nStartNode;
+        return m_nodesToVisitTbl.isEmpty() && curNode == startNode;
     }
 }

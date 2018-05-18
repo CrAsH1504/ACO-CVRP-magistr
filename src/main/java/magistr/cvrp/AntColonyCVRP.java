@@ -7,8 +7,8 @@ import magistr.ants.AntGraph;
 import java.util.Random;
 import java.util.Vector;
 
-import static magistr.ants.Ant.s_bestPathVect;
-import static magistr.ants.Ant.s_dBestPathValue;
+import static magistr.ants.Ant.bestPathVect;
+import static magistr.ants.Ant.bestPathValue;
 import static magistr.cvrp.AntCVRP.R;
 import static magistr.cvrp.AntCVRP.Q;
 
@@ -23,9 +23,9 @@ public class AntColonyCVRP extends AntColony {
         Random ran = new Random(System.currentTimeMillis());
         AntCVRP.reset();
         AntCVRP.setAntColony(this);
-        AntCVRP ant[] = new AntCVRP[m_nAnts];
-        for (int i = 0; i < m_nAnts; i++) {
-            ant[i] = new AntCVRP(0, this, m_capacity);
+        AntCVRP ant[] = new AntCVRP[numAnts];
+        for (int i = 0; i < numAnts; i++) {
+            ant[i] = new AntCVRP(0, this, capacity);
         }
 
         return ant;
@@ -35,22 +35,22 @@ public class AntColonyCVRP extends AntColony {
     protected void globalUpdatingRule() {
         double dEvaporation = 0;
 
-        for (int r = 0; r < m_graph.nodes(); r++) {
-            for (int s = 0; s < m_graph.nodes(); s++) {
+        for (int r = 0; r < graph.nodes(); r++) {
+            for (int s = 0; s < graph.nodes(); s++) {
                 if (r != s) {
-                    dEvaporation = R * m_graph.tau(r, s);
-                    m_graph.updateTau(r, s, dEvaporation);
+                    dEvaporation = R * graph.tau(r, s);
+                    graph.updateTau(r, s, dEvaporation);
                 }
             }
         }
-        Vector path = s_bestPathVect;
-        final AntGraph graph = m_graph;
+        Vector path = bestPathVect;
+        final AntGraph graph = this.graph;
         for (int i = 1; i < path.size(); i++) {
             int currVertex = (int) path.get(i - 1);
             int nextVertex = (int) path.get(i);
-            double val = graph.tau(currVertex, nextVertex) + Q / s_dBestPathValue;
+            double val = graph.tau(currVertex, nextVertex) + Q / bestPathValue;
             graph.updateTau(currVertex, nextVertex, val);
-            double val2 = graph.tau( nextVertex,currVertex) + Q / s_dBestPathValue;
+            double val2 = graph.tau( nextVertex,currVertex) + Q / bestPathValue;
             graph.updateTau(nextVertex, currVertex , val2);
         }
 
