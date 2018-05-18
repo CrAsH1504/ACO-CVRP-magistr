@@ -73,8 +73,6 @@ public class PartPath {
         return part < delta;
     }
 
-    ;
-
     public static void setDelta(int delta) {
         PartPath.delta = delta;
     }
@@ -103,9 +101,5 @@ public class PartPath {
 
     public int getCurCup() {
         return curCup;
-    }
-
-    public int getMaxCup() {
-        return maxCup;
     }
 }
