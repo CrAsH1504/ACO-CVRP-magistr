@@ -61,8 +61,6 @@ public abstract class Ant extends Observable implements Runnable {
 
         final AntGraph graph = antColony.getGraph();
         curNode = partPath.getCurNode();
-
-        //       m_path      = new int[graph.nodes()][graph.nodes()];
         pathVect = new Vector(graph.nodes());
         pathVect.addAll(partPath.getPartPathVect());
         pathValue = partPath.getPartPathValue();
@@ -70,7 +68,7 @@ public abstract class Ant extends Observable implements Runnable {
     }
 
     public void start(PartPath partPath) {
-        init(partPath);  // начальные данные для муравья
+        init(partPath);
         Thread thread = new Thread(this);
         thread.setName("Ant " + numAntID);
         thread.start();
@@ -79,10 +77,8 @@ public abstract class Ant extends Observable implements Runnable {
     public void run() {
         intCounter++;
         final AntGraph graph = antColony.getGraph();
-
         while (!end()) {
             int nNewNode;
-
             synchronized (graph) {
                 nNewNode = stateTransitionRule(curNode);
                 pathValue += graph.delta(curNode, nNewNode);
@@ -105,9 +101,7 @@ public abstract class Ant extends Observable implements Runnable {
                 outs.println("Ant " + numAntID + ", Лучшая длина " + bestPathValue + ", Итерация " + lastBestPathIteration + ", длина " + bestPathVect.size() + ", маршрут" + bestPathVect);
             }
         }
-
         observer.update(this, null);
-
         if (antColony.done())
             outs.close();
     }
