@@ -14,12 +14,6 @@ import static magistr.ants.Ant.s_dBestPathValue;
 import static magistr.ants.Ant.s_nLastBestPathIteration;
 import static magistr.ants.Ant.s_bestPathVect;
 
-
-/**
- * Created by Mati on 2017-05-09.
- */
-
-
 public abstract class AntColony implements Observer {
     protected PrintStream m_outs;
 

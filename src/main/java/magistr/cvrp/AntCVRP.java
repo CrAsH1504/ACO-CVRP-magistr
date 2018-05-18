@@ -6,9 +6,6 @@ import magistr.ants.Ant;
 
 import java.util.*;
 
-/**
- * Created by Mati on 2017-05-09.
- */
 public class AntCVRP extends Ant {
 
     private static final double A = 1.04;

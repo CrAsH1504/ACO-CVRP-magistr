@@ -11,9 +11,6 @@ import java.nio.file.Paths;
 import java.util.Random;
 import java.util.stream.Stream;
 
-/**
- * Created by Mati on 2017-05-21.
- */
 public class TestCVRP {
     private static Random s_ran = new Random(System.currentTimeMillis());
 
