@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Generator {
 
     private File file;
-    private String m_path;
+    private String path;
     private Scanner scanner;
     private int dimensions;
     private int cap;
@@ -18,11 +18,11 @@ public class Generator {
     private int[] demands;
 
     Generator(String path){
-        m_path = path;
+        this.path = path;
     }
 
     public void init(){
-        file = new File(m_path);
+        file = new File(path);
         try {
             scanner = new Scanner(file);
         }
@@ -67,10 +67,6 @@ public class Generator {
                     nextLine = scanner.nextLine();
                 }
             }
-
-
-
-
         }
         generateOutputFile();
     }

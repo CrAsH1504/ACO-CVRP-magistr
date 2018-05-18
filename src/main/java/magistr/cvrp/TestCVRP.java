@@ -24,10 +24,10 @@ public class TestCVRP {
 
 
     public static void main(String[] args) {
-        start(new String[]{"-a", "76",
+        start(new String[]{"-a", "12",
                 "-i", "100",
                 "-r", "1",
-                "-file", "E-n76-k8.vrp",
+                "-file", "E-n22-k4.vrp",
                 "-delta", "10"
 
         });
@@ -49,7 +49,6 @@ public class TestCVRP {
         int capacity = 0;
         int[] demand = null;
         double d[][] = null;
-        boolean isShowGraph = false;
         for (int i = 0; i < args.length; i += 2) {
             if (args[i].equals("-a")) {
                 nAnts = Integer.parseInt(args[i + 1]);
@@ -83,8 +82,6 @@ public class TestCVRP {
                 } catch (java.io.IOException ex) {
                     System.out.println("input file not found");
                 }
-            } else if (args[i].equals("-showgraph")) {
-                isShowGraph = true;
             } else if (args[i].equals("-delta")) {
                 PartPath.setDelta(Integer.parseInt(args[i + 1]));
             }

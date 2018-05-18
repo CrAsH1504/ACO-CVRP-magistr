@@ -10,11 +10,9 @@ public class AntCVRP extends Ant {
 
     private static final double A = 1.04;
     private static final double B = 1.5;
-    public static final double Q = 4;
-    public static final double R = 0.74;
+    public static final double U = 4;
+    public static final double P = 0.74;
     private AntGraph graph;
-
-    private static final Random s_randGen = new Random(System.currentTimeMillis());
 
     protected Hashtable m_nodesToVisitTbl;
 
@@ -28,14 +26,8 @@ public class AntCVRP extends Ant {
         m_nodesToVisitTbl = new Hashtable(partPath.getNodesToVisitTbl());
     }
 
-
     @Override
     public int stateTransitionRule(int r) {
-        // graph = antColony.getGraph();
-        /*if (s_randGen.nextDouble() <= Q0) {
-            return exploitation();
-        }
-        return exploration();*/
         return chooseNext();
     }
 
@@ -57,7 +49,6 @@ public class AntCVRP extends Ant {
             // генерация выбора маршрута
             double rand = Math.random();
             double segment = 0;
-
             en = nodesToPosibleVisitTbl.elements();
             while (en.hasMoreElements()) {
                 nNode = (Integer) en.nextElement();
@@ -76,13 +67,8 @@ public class AntCVRP extends Ant {
         } else {
             curCapac = maxCap;
         }
-
-        //  System.out.println("Ant: " + numAntID + " makes move: " + curNode + " -> " + nMaxNode + " iteration: " + intCounter);
-
-
         return nMaxNode;
     }
-
 
     private double hValue(int nNode) {
         double value = Math.pow(graph.tau(curNode, nNode), A) * Math.pow(graph.etha(curNode, nNode), B);
@@ -95,9 +81,9 @@ public class AntCVRP extends Ant {
         for (int i = 1; i < path.size(); i++) {
             int currVertex = (int) path.get(i - 1);
             int nextVertex = (int) path.get(i);
-            double val = graph.tau(currVertex, nextVertex) + Q / (R * length);
+            double val = graph.tau(currVertex, nextVertex) + U / (P * length);
             graph.updateTau(currVertex, nextVertex, val);
-            double val2 = graph.tau( nextVertex,currVertex) + Q / (R * length);
+            double val2 = graph.tau( nextVertex,currVertex) + U / (P * length);
             graph.updateTau(nextVertex, currVertex , val2);
         }
     }
