@@ -1,6 +1,3 @@
-/**
- * Created by Mati on 2017-05-09.
- */
 package magistr.cvrp;
 
 import magistr.ants.Ant;

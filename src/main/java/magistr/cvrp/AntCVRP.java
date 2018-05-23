@@ -5,9 +5,7 @@ import magistr.ants.AntGraph;
 
 import java.util.*;
 
-/**
- * Created by Mati on 2017-05-09.
- */
+
 public class AntCVRP extends Ant {
 
     public static double A;

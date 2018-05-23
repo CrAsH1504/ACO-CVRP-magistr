@@ -6,9 +6,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import magistr.charts.AntsLineChart;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,9 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.stream.Stream;
 
-/**
- * Created by Mati on 2017-05-21.
- */
+
 public class TestCVRP {
     private static Random s_ran = new Random(System.currentTimeMillis());
 
@@ -63,11 +64,11 @@ public class TestCVRP {
             cellResult.setCellValue("Result " + (i - 3));
         }
 
-        Cell cellMaxResult =  row.createCell(9);
+        Cell cellMaxResult = row.createCell(9);
         cellMaxResult.setCellValue("Max value");
 
         int i = 1;
-        for (A = Double.valueOf(args[0]) ; A < Double.valueOf(args[1]) ; A += 0.1) {
+        for (A = Double.valueOf(args[0]); A < Double.valueOf(args[1]); A += 0.1) {
             System.out.println("A = " + A);
             for (B = Double.valueOf(args[2]); B < Double.valueOf(args[3]); B += 0.1) {
                 System.out.println("B = " + B);
@@ -81,15 +82,11 @@ public class TestCVRP {
                         AntCVRP.Q = Q;
 
 
-
                         start(new String[]{"-a", "6",
-                                        "-i", "1000",
-                                        "-r", "5",
-                                        "-file", "E-n22-k4.vrp"
+                                "-i", "1000",
+                                "-r", "5",
+                                "-file", "E-n22-k4.vrp"
                         });
-
-
-
 
 
                         row = sheet.createRow(i++);
@@ -107,19 +104,15 @@ public class TestCVRP {
 
                         double maxVal = Double.MAX_VALUE;
                         for (int j = 4; j < 9; j++) {
-                            cellResult = row.createCell(j,0);
-                            cellResult.setCellValue(chet[j-4]);
-                            if (chet[j-4]< maxVal){
-                                maxVal = chet[j-4];
+                            cellResult = row.createCell(j, 0);
+                            cellResult.setCellValue(chet[j - 4]);
+                            if (chet[j - 4] < maxVal) {
+                                maxVal = chet[j - 4];
                             }
                         }
 
-                        cellMaxResult = row.createCell(9,0);
+                        cellMaxResult = row.createCell(9, 0);
                         cellMaxResult.setCellValue(maxVal);
-
-
-
-
 
 
                     }
@@ -143,7 +136,7 @@ public class TestCVRP {
 
     static void start(String[] args) {
         // Print application prompt to console.
-   //    System.out.println("AntColonySystem for TSP");
+        //    System.out.println("AntColonySystem for TSP");
 
         if (args.length < 4) {
             System.out.println("Wrong number of parameters");
@@ -157,17 +150,16 @@ public class TestCVRP {
         int capacity = 0;
         int[] demand = null;
         double d[][] = null;
-        boolean isShowGraph = false;
         for (int i = 0; i < args.length; i += 2) {
             if (args[i].equals("-a")) {
                 nAnts = Integer.parseInt(args[i + 1]);
-            //    System.out.println("Ants: " + nAnts);
+                //    System.out.println("Ants: " + nAnts);
             } else if (args[i].equals("-i")) {
                 nIterations = Integer.parseInt(args[i + 1]);
-             //   System.out.println("Iterations: " + nIterations);
+                //   System.out.println("Iterations: " + nIterations);
             } else if (args[i].equals("-r")) {
                 nRepetitions = Integer.parseInt(args[i + 1]);
-              //  System.out.println("Repetitions: " + nRepetitions);
+                //  System.out.println("Repetitions: " + nRepetitions);
             } else if (args[i].equals("-file")) {
                 String fileName = args[i + 1];
                 Generator generator = new Generator("test_src/" + fileName);
@@ -176,26 +168,23 @@ public class TestCVRP {
                     d = create2DDoubleMatrixFromFile(Paths.get("test_src/input.txt"));
                     for (int g = 0; g < nNodes; g++) {
                         for (int h = 0; h < nNodes; h++) {
-                  //          System.out.print(d[g][h] + " ");
+                            //          System.out.print(d[g][h] + " ");
                         }
-                 //       System.out.print("\n");
+                        //       System.out.print("\n");
                     }
                     nNodes = generator.Dimensions();
                     demand = generator.Demands();
                     capacity = generator.Capacity();
-                 //   System.out.println("Nodes: " + nNodes);
-                //    System.out.println("Capacity: " + capacity);
-                 //   for (int g = 0; g < nNodes; g++) {
-                 //       System.out.print(demand[g] + " ");
-                  //  }
-                //    System.out.println("\n");
+                    //   System.out.println("Nodes: " + nNodes);
+                    //    System.out.println("Capacity: " + capacity);
+                    //   for (int g = 0; g < nNodes; g++) {
+                    //       System.out.print(demand[g] + " ");
+                    //  }
+                    //    System.out.println("\n");
                 } catch (java.io.IOException ex) {
                     System.out.println("input file not found");
                 }
-            } else if (args[i].equals("-showgraph")) {
-                isShowGraph = true;
             }
-
         }
 
         if (nAnts == 0 || nNodes == 0 || nIterations == 0 || nRepetitions == 0) {
@@ -243,11 +232,8 @@ public class TestCVRP {
                 chet[i] = antColony.getBestPathValue();
                 totalTime += System.currentTimeMillis() - begin;
 
-                if (isShowGraph) {
-                    AntsLineChart.showGraph("" + (i + 1) + "_" + nNodes + "x" + nAnts + "x" + nIterations + "_colony.txt");
-                }
             }
-      //      System.out.printf("\nAverage time: %.2f", ((double) totalTime) / 1000.0);
+            //      System.out.printf("\nAverage time: %.2f", ((double) totalTime) / 1000.0);
             //  outs2.close();
         } catch (Exception ex) {
         }

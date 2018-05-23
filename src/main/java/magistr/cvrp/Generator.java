@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-/**
- * Created by Mati on 2017-05-21.
- */
+
 public class Generator {
 
     private File file;
