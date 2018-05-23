@@ -3,7 +3,6 @@ package magistr.cvrp;
 import magistr.adaptation.PartPath;
 import magistr.adaptation.StabilitySolution;
 import magistr.ants.AntGraph;
-import magistr.charts.AntsLineChart;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,7 +56,6 @@ public class TestCVRP {
         int capacity = 0;
         int[] demand = null;
         double d[][] = null;
-        boolean isShowGraph = false;
         for (int i = 0; i < args.length; i += 2) {
             if (args[i].equals("-a")) {
                 nAnts = Integer.parseInt(args[i + 1]);
@@ -91,8 +89,6 @@ public class TestCVRP {
                 } catch (java.io.IOException ex) {
                     System.out.println("input file not found");
                 }
-            } else if (args[i].equals("-showgraph")) {
-                isShowGraph = true;
             } else if (args[i].equals("-delta")) {
                 PartPath.setDelta(Integer.parseInt(args[i + 1]));
                 StabilitySolution.setDelta(Integer.parseInt(args[i + 1]));
@@ -151,9 +147,6 @@ public class TestCVRP {
                 outs2.println(i + "," + PartPath.getFullPathValue() + "," + antColony.getLastBestPathIteration() + ", " + StabilitySolution.printTable());
                 totalTime += System.currentTimeMillis() - begin;
 
-                if (isShowGraph) {
-                    AntsLineChart.showGraph("" + (i + 1) + "_" + nNodes + "x" + nAnts + "x" + nIterations + "_colony.txt");
-                }
             }
             System.out.printf("\nAverage time: %.2f", ((double) totalTime) / 1000.0);
             outs2.close();
