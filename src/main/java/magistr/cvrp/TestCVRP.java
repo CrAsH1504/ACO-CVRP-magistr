@@ -23,7 +23,7 @@ public class TestCVRP {
     }
 
 
-    public static void main(String[] args) {
+  /*  public static void main(String[] args) {
         start(new String[]{"-a", "12",
                 "-i", "100",
                 "-r", "1",
@@ -31,9 +31,9 @@ public class TestCVRP {
                 "-delta", "10"
 
         });
-    }
+    }*/
 
-    static void start(String[] args) {
+    public static void main(String[] args) {
         // Print application prompt to console.
         System.out.println("AntColonySystem for TSP");
 
